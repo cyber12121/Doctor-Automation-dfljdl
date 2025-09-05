@@ -1,1 +1,22 @@
 # Doctor-Automation-dfljdl
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite parallel="classes" name="Suite" thread-count="5">
+	<groups>
+		<run>
+			<include name="sanity" />
+		</run>
+	</groups>
+
+	<listeners>
+		<listener class-name="coreUtilities.testlisteners.TestListener" />
+		<listener class-name="coreUtilities.testlisteners.RetryListener" />
+	</listeners>
+	<test name="Test">
+		<parameter name="browser" value="chrome" />
+		<parameter name="environment" value="dev" />
+		<classes>
+			<class name="testcases.FormManagement_L1_TestCases" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
