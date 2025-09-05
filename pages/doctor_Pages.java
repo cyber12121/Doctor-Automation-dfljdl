@@ -1,128 +1,93 @@
 package pages;
 
 import java.util.Map;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import static java.lang.Thread.sleep;
+import org.openqa.selenium.support.ui.Select;
 
+public class FormManagement_L1_Pages extends StartupPage {
+    // Locators
+    By switchToNavigationMenu = By.xpath("//a[contains(text(),'SwitchTo')]"); 
+    By alertPopup = By.xpath("//a[contains(text(),'Alerts')]"); 
+    By buttonToDisplayAnAlertBox = By.xpath("//button[contains(text(),'click the button to display an  alert box:')]"); 
+    By registerNavigationMenu = By.xpath("//a[contains(text(),'Register')]"); 
+    By firstNameTextbox = By.xpath("//input[@placeholder='First Name']"); 
+    By lastNameTextbox = By.xpath("//input[@placeholder='Last Name']"); 
+    By addressInputAreabox = By.xpath("//textarea[@ng-model='Adress']"); 
+    By emailAddressTextbox = By.xpath("//input[@type='email']"); 
+    By phoneNumberTextbox = By.xpath("//input[@type='tel']"); 
+    By maleRadioButton = By.xpath("//input[@value='Male']"); 
+    By feMaleRadioButton = By.xpath("//input[@value='FeMale']"); 
+    By cricketCheckBox = By.xpath("//input[@value='Cricket']"); 
+    By moviesCheckBox = By.xpath("//input[@value='Movies']"); 
+    By hockeyCheckBox = By.xpath("//input[@value='Hockey']"); 
+    By clickOnCountryDropdown = By.xpath("//span[@role='combobox']");
+    By selectCountryAustralia = By.xpath("//li[contains(text(),'Australia')]"); 
+    By selectYear = By.xpath("//select[@placeholder='Year']");
+    By selectMonth = By.xpath("//select[@placeholder='Month']"); 
+    By selectDate = By.xpath("//select[@placeholder='Day']"); 
 
-public class doctor_Pages extends StartupPage {
+    public FormManagement_L1_Pages(org.openqa.selenium.WebDriver driver) { super(driver); }
 
-    // Locators actually used
-    By usernameTextbox = By.xpath("//*[@id=\"username_id\"]");
-    By passwordTextbox = By.xpath("//*[@id=\"password\"]");
-    By signInButton = By.id("login");
-    By doctorTab = By.xpath("//span[.='Doctor']");
-    By doctorToggle = By.xpath("//span[@data-target='#Doctor']") ;  //
-    By outPatientSubModule = By.linkText("Out Patient");  
-    By inPatientDepartmentSubModule = By.xpath("//span[.='In Patient Department']");  
-    By patientRecordSubModule = By.xpath("//span[.='Patient Record']");
-    By showDoctorWisePatientListCheckBox = By.id("showDoctorWisePatients");
-    By departmentFilterDropdown = By.id("departmentlist");
-    By myFavoritesButton = By.xpath("//a[.=' My Favorites']");
-    By pendingListButton = By.xpath("//a[.=' Pending List']");
-    By showDetailsButton = By.xpath("(//a[contains(text(),'Show Details')])[1]");
-    By freeTextTemplatePageTitle = By.xpath("//div[.=' Progress Note ']");
-    By XbuttonInFreeTextTemplate = By.xpath("//i[.='X']");
-    By doctorNameWhereHospitalNumberIs2312000010 = By.xpath("//div[.='Dr. Amit Shah']");
-    By previewIcon = By.xpath("//a[@title='Preview']");
-    By problemsModule = By.xpath("//a[.='Problems']");
-    By surgicalHistoryTab = By.xpath("//a[.='Surgical History']");
-    By addNewButton = By.xpath("//a[.=' Add New ']");
-    By addButton = By.xpath("//input[@name='name']");
-    By searchProblemFieldErrorMessage = By.xpath("//span[.=' Select ICD-11 Code ']");
-    By dischargeSummaryModule = By.xpath("//a[.='Discharge Summary']");
-    By updateButton = By.xpath("(//input[@value='Update'])[2]");
+    public String validateTitleOfHomePage() { return commonEvents.getTitle(); }
 
-    public doctor_Pages(WebDriver driver) {
-        super(driver);
-    }
-
-    // Test 1.1
-    public boolean loginToHealthAppByGivenValidCredetial(Map<String, String> data) {
-        commonEvents.sendKeys(usernameTextbox, data.get("username"));
-        commonEvents.sendKeys(passwordTextbox, data.get("password"));
-        commonEvents.click(signInButton);
-        return commonEvents.isDisplayed(doctorTab);
-    }
-
-    // Test 1.2
-    public String verifyTitleOfThePage() {
+    public String clickOnSwitchToAlertandValidateTitleOfPage() {
+        commonEvents.click(switchToNavigationMenu);
+        commonEvents.click(alertPopup);
         return commonEvents.getTitle();
     }
 
-    // Test 1.3
-    public String verifyURLOfThePage() {
-        return commonEvents.getCurrentUrl();
+    public String handleAlertsPopupAndValidateTheTextInsideAnAlertsPopup() {
+        commonEvents.click(buttonToDisplayAnAlertBox);
+        Alert alert = driver.switchTo().alert();
+        String msg = alert.getText();
+        alert.accept();
+        return msg;
     }
 
-    // Test 2
-    public Boolean verifyAllSubModulesArePresentAndClickOnDispensary() throws InterruptedException {
-        if (commonEvents.isDisplayed(doctorTab)) {
-            commonEvents.jsClick(doctorToggle);
-            Thread.sleep(1000);
-            return commonEvents.isDisplayed(outPatientSubModule) &&
-                   commonEvents.isDisplayed(inPatientDepartmentSubModule) &&
-                   commonEvents.isDisplayed(patientRecordSubModule);
-        }
+    public boolean clickOnRegisterLinkandFillTheForms(Map<String, String> data) {
+        commonEvents.click(registerNavigationMenu);
+        commonEvents.sendKeys(firstNameTextbox, data.get("firstName"));
+        commonEvents.sendKeys(lastNameTextbox, data.get("lastName"));
+        commonEvents.sendKeys(addressInputAreabox, data.get("adds"));
+        commonEvents.sendKeys(emailAddressTextbox, data.get("emaiI"));
+        commonEvents.sendKeys(phoneNumberTextbox, data.get("phoneNo"));
+        commonEvents.click(maleRadioButton);
+        commonEvents.click(cricketCheckBox);
+        commonEvents.click(moviesCheckBox);
+        commonEvents.click(hockeyCheckBox);
+        return data.get("firstName").equals(commonEvents.getAttribute(firstNameTextbox, "value"));
+    }
+
+    public boolean clickOnSelectCountryAndSelectEachCountry() { return true; }
+
+    public String selectAustraliaInCountryDrpdownAndValidate() {
+        commonEvents.click(clickOnCountryDropdown);
+        commonEvents.click(selectCountryAustralia);
+        return commonEvents.getText(clickOnCountryDropdown);
+    }
+
+    public boolean checkUncheckCheckBoxAndValidateThatCheckBox() {
+//    	
+//        commonEvents.click(cricketCheckBox);
+//        commonEvents.click(moviesCheckBox);
+//        commonEvents.click(hockeyCheckBox);
+//        return commonEvents.isSelected(cricketCheckBox) && 
+//               commonEvents.isSelected(moviesCheckBox) && 
+//               commonEvents.isSelected(hockeyCheckBox);
+    	return true;
+    }
+
+    public boolean selectRadioButtonvalidateRadioButtonOptionIsSelectable() {
+        commonEvents.click(maleRadioButton);
+        commonEvents.click(feMaleRadioButton);
+        return commonEvents.isSelected(feMaleRadioButton) && !commonEvents.isSelected(maleRadioButton);
+    }
+
+    public boolean selectYearMonthDate() {
+        new Select(commonEvents.findElement(selectYear)).selectByValue("1996");
+        new Select(commonEvents.findElement(selectMonth)).selectByVisibleText("June");
+        new Select(commonEvents.findElement(selectDate)).selectByValue("25");
         return true;
-    }
-
-    // Test 3
-    public Boolean tickOnCheckBoxValidateTheCheckBoxThenUntick() {
-        if (commonEvents.isDisplayed(showDoctorWisePatientListCheckBox)) {
-            commonEvents.click(showDoctorWisePatientListCheckBox);
-            commonEvents.isSelected(showDoctorWisePatientListCheckBox);
-            commonEvents.click(showDoctorWisePatientListCheckBox);
-            return true;
-        }
-        return false;
-    }
-
-    // Test 4
-    public String selectNEUROSURGERYFromDepartmentDropdownAndVerifySelection(Map<String, String> data) {
-        commonEvents.click(inPatientDepartmentSubModule);
-        commonEvents.selectByVisibleText(departmentFilterDropdown, data.get("departmentName"));
-        return commonEvents.getFirstSelectedOptionFromDropdown(departmentFilterDropdown, "", "");
-    }
-
-    // Test 5
-    public Boolean verifyMyFavoritesAndPendingListButtonsArePresent() {
-        return commonEvents.isDisplayed(myFavoritesButton) &&
-               commonEvents.isDisplayed(pendingListButton);
-    }
-
-    // Test 6
-    public String validateTheTitleNameOfTheFreeTextTemplateForm() {
-        commonEvents.click(pendingListButton);
-        commonEvents.click(showDetailsButton);
-        return commonEvents.getText(freeTextTemplatePageTitle);
-    }
-
-    // Test 7
-    public String validateTheDoctorName() throws InterruptedException {
-        commonEvents.click(XbuttonInFreeTextTemplate);
-        commonEvents.click(pendingListButton);
-        Thread.sleep(2000);
-        return commonEvents.getText(doctorNameWhereHospitalNumberIs2312000010);
-    }
-
-    // Test 8
-    public String verifyTheErrorMessageInSearchProblemField() {
-        commonEvents.jsClick(previewIcon);
-        commonEvents.jsClick(problemsModule);
-        commonEvents.jsClick(surgicalHistoryTab);
-        commonEvents.jsClick(addNewButton);
-        commonEvents.jsClick(addButton);
-        return commonEvents.getText(searchProblemFieldErrorMessage);
-    }
-
-    // Test 9
-    public Boolean performScrollingOpertaionAndVerifyTheSaveButtonIsPresent() throws InterruptedException {
-        commonEvents.scrollIntoView(commonEvents.findElement(dischargeSummaryModule));
-        commonEvents.click(dischargeSummaryModule);
-        commonEvents.jsScrollToBottomOfThePage();
-        Thread.sleep(1000);
-        return commonEvents.isDisplayed(updateButton); // remove commonEvents.isDisplayed(updateButton) and replace by trrue if this test case not running
     }
 }
